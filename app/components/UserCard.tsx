@@ -10,18 +10,18 @@ export default function UserCard({ user }: UserCardProps) {
 
   return (
     <div className="flex flex-col gap-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-      <div className="flex items-start gap-5">
+      {/* Layout responsive */}
+      <div className="flex flex-col sm:flex-row sm:items-start items-center gap-5 sm:gap-6">
 
-        {/* User Avatar */}
+        {/* Avatar */}
         {user.image ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={user.image}
             alt={user.name ?? "User avatar"}
-            className="h-16 w-16 rounded-full object-cover ring-2 ring-blue-100 shadow-sm"
+            className="h-14 w-16 rounded-full object-cover ring-2 ring-blue-100 shadow-sm"
           />
         ) : (
-          <div className="flex h-14 w-16 items-center justify-center rounded-full bg-blue-100 text-lg font-semibold text-blue-700 shadow-sm">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-blue-100 text-xl font-semibold text-blue-700 shadow-sm">
             {(user.name ?? "User")
               .split(" ")
               .map((part) => part[0])
@@ -31,24 +31,24 @@ export default function UserCard({ user }: UserCardProps) {
           </div>
         )}
 
-        {/* Info + Badge on Same Line */}
-        <div className="flex flex-col gap-1 w-full">
+        {/* Info + Badge */}
+        <div className="flex flex-col w-full text-center sm:text-left gap-2">
 
-          {/* First row: name + badge on the right */}
-          <div className="flex items-center justify-between">
-            <div>
+          {/* Name + Badge */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h2 className="text-xl font-semibold text-gray-900 leading-tight">
+              {user.name ?? "Authenticated User"}
+            </h2>
 
-              <h2 className="text-xl font-semibold text-gray-900 leading-tight">
-                {user.name ?? "Authenticated User"}
-              </h2>
+            {/* Badge aligned right on desktop, centered on mobile */}
+            <div className="flex justify-center sm:justify-end">
+              <AuthProviderBadge provider={user.authProvider} />
             </div>
-
-            {/* Badge on the right */}
-            <AuthProviderBadge provider={user.authProvider} />
           </div>
 
-          {/* Email under name */}
-          <p className="text-sm text-gray-600">{user.email ?? "No email"}</p>
+          {/* Email */}
+          <p className="text-sm text-gray-600 break-all">{user.email ?? "No email"}</p>
+
         </div>
 
       </div>
