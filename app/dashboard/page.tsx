@@ -29,6 +29,15 @@ export default async function DashboardPage() {
           <NewsWidget />
         </div>
       </main>
+<footer className="mt-12 border-t border-gray-200 bg-white">
+  <div className="mx-auto max-w-4xl px-6 py-6 text-center">
+    <p className="text-sm text-gray-500">
+      Developed by{" "}
+      <span className="font-semibold text-indigo-600">Ziyad T. Almaghrabi</span>
+    </p>
+  </div>
+</footer>
+
     </div>
   );
 }

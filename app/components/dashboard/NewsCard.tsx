@@ -19,6 +19,7 @@ export default function NewsCard({
       {/* Bigger full-width image */}
       <div className="w-full">
         {image ? (
+          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt={title}
@@ -56,4 +57,3 @@ export default function NewsCard({
     </article>
   );
 }
-

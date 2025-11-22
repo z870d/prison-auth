@@ -10,6 +10,11 @@ const microsoftTenantId =
   process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT_ID ??
   process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT ??
   process.env.AZURE_AD_TENANT_ID;
+const microsoftIssuer =
+  process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER ??
+  (microsoftTenantId
+    ? `https://login.microsoftonline.com/${microsoftTenantId}/v2.0`
+    : undefined);
 
 type EmailType = "personal" | "company" | "academic" | "unknown";
 
@@ -61,11 +66,12 @@ function detectEmailType(email?: string | null): EmailType {
 }
 
 const authConfig: NextAuthConfig = {
+  trustHost: true,
   providers: [
     MicrosoftEntraID({
       clientId: microsoftClientId!,
       clientSecret: microsoftClientSecret!,
-      tenantId: microsoftTenantId!,
+      issuer: microsoftIssuer,
       authorization: {
         params: {
           scope: "openid profile email offline_access User.Read",
@@ -144,8 +150,15 @@ const authConfig: NextAuthConfig = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id =
-          (token.id as string | undefined) ?? (token.sub as string | undefined);
+        const userId =
+          typeof token.id === "string"
+            ? token.id
+            : typeof token.sub === "string"
+              ? token.sub
+              : undefined;
+        if (userId) {
+          session.user.id = userId;
+        }
         session.user.name =
           (token.name as string | null | undefined) ?? session.user.name;
         session.user.email =
